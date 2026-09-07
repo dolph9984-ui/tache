@@ -1,0 +1,96 @@
+/* ---------- Design tokens ---------- */
+:root {
+  --ink: #1E2A28;
+  --ink-soft: #5B6A66;
+  --bg: #EFF1EC;
+  --bg-body: #DADFD6;
+  --surface: #FFFFFF;
+  --surface-alt: #E3E7E0;
+  --border: #D7DBD2;
+
+  /* Priorité (bordures de tâche, sélecteur de priorité) */
+  --urgent: #D93C1F;
+  --urgent-bg: #FBE7E2;
+  --important: #C98A1F;
+  --important-bg: #FBEEDA;
+  --normal: #4C6B5E;
+  --normal-bg: #E4EAE5;
+
+  /* Statuts (graphiques, badges) — palette dédiée, validée pour la
+     distinction daltonisme (voir le skill dataviz : 4 teintes, contrôle
+     CVD par paires, ΔE >= 6 sur toutes les paires). Ne partage pas les
+     teintes de priorité ci-dessus : "à faire" et "réalisée" doivent
+     rester visuellement distincts au premier coup d'œil. */
+  --done: #1D9150;
+  --done-bg: #E1F3E9;
+  --pending: #2B6CB0;
+  --pending-bg: #E4EDF7;
+  --missed: #D93C1F;
+  --missed-bg: #FBE7E2;
+  --postponed: #C2368B;
+  --postponed-bg: #F7E4F0;
+
+  --shadow-sm: 0 8px 18px rgba(30, 42, 40, 0.08);
+  --shadow-md: 0 10px 22px rgba(30, 42, 40, 0.10);
+  --shadow-lg: 0 14px 28px rgba(30, 42, 40, 0.28);
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  color-scheme: light;
+}
+
+/* ---------- Dark theme ----------
+   Applied automatically on system preference, or forced via
+   [data-theme] when the user picks a theme in Paramètres. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #EAF0ED;
+    --ink-soft: #9BAAA5;
+    --bg: #161C1A;
+    --bg-body: #0F1412;
+    --surface: #1C2422;
+    --surface-alt: #232C29;
+    --border: #2E3936;
+
+    --urgent-bg: #3A211B;
+    --important-bg: #392C17;
+    --normal-bg: #1E2B26;
+
+    --done: #1FB06B;
+    --done-bg: #16332A;
+    --pending: #3987E5;
+    --pending-bg: #16283A;
+    --missed: #E2573A;
+    --missed-bg: #3A211B;
+    --postponed: #D45FAE;
+    --postponed-bg: #3A1F32;
+
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ink: #EAF0ED;
+  --ink-soft: #9BAAA5;
+  --bg: #161C1A;
+  --bg-body: #0F1412;
+  --surface: #1C2422;
+  --surface-alt: #232C29;
+  --border: #2E3936;
+
+  --urgent-bg: #3A211B;
+  --important-bg: #392C17;
+  --normal-bg: #1E2B26;
+
+  --done: #1FB06B;
+  --done-bg: #16332A;
+  --pending: #3987E5;
+  --pending-bg: #16283A;
+  --missed: #E2573A;
+  --missed-bg: #3A211B;
+  --postponed: #D45FAE;
+  --postponed-bg: #3A1F32;
+
+  color-scheme: dark;
+}

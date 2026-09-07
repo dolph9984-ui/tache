@@ -1,0 +1,113 @@
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+.link {
+  font-size: 13.5px;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.periodTabs { display: flex; gap: 24px; margin-top: 30px; border-bottom: 1px solid var(--border); }
+.periodTab {
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  padding: 0 0 12px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+.periodTab.active { color: var(--ink); border-bottom-color: var(--ink); font-weight: 600; }
+
+.overview {
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 32px;
+}
+.overviewText { flex: 1; min-width: 220px; }
+.headline { font-family: var(--font-display); font-size: 19px; font-weight: 700; line-height: 1.4; }
+.streak {
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  color: var(--important);
+  font-weight: 600;
+  background: var(--important-bg);
+  padding: 5px 11px;
+  border-radius: 999px;
+}
+
+.statGrid {
+  margin-top: 20px;
+  display: flex;
+  gap: 14px;
+}
+.statCard {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 14px;
+  padding: 16px 18px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.statCard:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.statTop { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+.statIcon { font-size: 13px; }
+.statLabel { font-size: 14.5px; font-weight: 700; white-space: nowrap; }
+.statNum {
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.foot {
+  margin-top: 34px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  border-top: 1px solid var(--border);
+  padding-top: 18px;
+  max-width: 640px;
+}
+
+@media (max-width: 1000px) {
+  .overview { flex-direction: column; align-items: stretch; }
+}
+@media (max-width: 640px) {
+  .statGrid {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  .statCard {
+    flex: 0 0 min(100%, 320px);
+    padding: 14px 16px;
+    gap: 8px;
+  }
+  .statLabel { font-size: 13px; }
+  .statNum { font-size: 24px; }
+}

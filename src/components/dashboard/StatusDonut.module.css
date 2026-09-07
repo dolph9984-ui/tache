@@ -1,0 +1,12 @@
+.wrap { position: relative; width: 176px; height: 176px; flex-shrink: 0; }
+.svg circle { transition: stroke-dasharray .4s ease; }
+.center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.pct { font-family: var(--font-display); font-size: 32px; font-weight: 700; }
+.label { font-size: 11.5px; color: var(--ink-soft); font-family: var(--font-mono); margin-top: 2px; }

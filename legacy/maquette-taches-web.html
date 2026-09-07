@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Maquette web — Gestion de tâches anti-procrastination</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+:root{
+  --ink:#1E2A28;
+  --ink-soft:#5B6A66;
+  --bg:#EFF1EC;
+  --surface:#FFFFFF;
+  --surface-alt:#E3E7E0;
+  --border:#D7DBD2;
+  --urgent:#D93C1F;
+  --important:#C98A1F;
+  --normal:#4C6B5E;
+  --done:#2F6F4E;
+  --done-bg:#E4EEE8;
+}
+
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{
+  background:#DADFD6;
+  font-family:'IBM Plex Sans', sans-serif;
+  color:var(--ink);
+}
+
+/* ---------- Shared type ---------- */
+h1{
+  font-family:'Space Grotesk', sans-serif;
+  font-size:28px;
+  font-weight:700;
+  letter-spacing:-0.01em;
+}
+.date-line{
+  color:var(--ink-soft);
+  font-size:13px;
+  margin-top:4px;
+  font-family:'IBM Plex Mono', monospace;
+}
+
+/* ---------- App shell ---------- */
+.app{
+  display:flex;
+  min-height:100vh;
+  background:var(--bg);
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar{
+  width:248px;
+  flex-shrink:0;
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  padding:30px 22px;
+  display:flex;
+  flex-direction:column;
+  gap:36px;
+  position:sticky;
+  top:0;
+  height:100vh;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+.brand-mark{
+  width:10px; height:10px;
+  border-radius:50%;
+  background:var(--urgent);
+  flex-shrink:0;
+}
+.brand-name{
+  font-family:'Space Grotesk', sans-serif;
+  font-size:18px;
+  font-weight:700;
+  letter-spacing:-0.01em;
+}
+
+.nav{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  border:none;
+  background:none;
+  text-align:left;
+  padding:11px 12px;
+  border-radius:9px;
+  font-family:'IBM Plex Sans', sans-serif;
+  font-size:14.5px;
+  font-weight:500;
+  color:var(--ink-soft);
+  cursor:pointer;
+}
+.nav-item .dot{
+  width:6px; height:6px;
+  border-radius:50%;
+  background:transparent;
+  flex-shrink:0;
+}
+.nav-item.active{
+  background:var(--surface-alt);
+  color:var(--ink);
+  font-weight:600;
+}
+.nav-item.active .dot{background:var(--urgent);}
+
+.sidebar-foot{
+  margin-top:auto;
+  padding-top:18px;
+  border-top:1px solid var(--border);
+}
+.new-task-btn{
+  width:100%;
+  padding:12px 0;
+  border:none;
+  border-radius:10px;
+  background:var(--ink);
+  color:#fff;
+  font-family:'Space Grotesk', sans-serif;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.new-task-btn:active{opacity:.85;}
+.new-task-btn .plus{font-size:17px; line-height:1;}
+
+/* ---------- Main content ---------- */
+.main{
+  flex:1;
+  min-width:0;
+  padding:52px 56px 80px;
+}
+.view{display:none;}
+.view.active{display:block;}
+.view-inner{
+  max-width:1040px;
+}
+
+/* ---------- Dashboard ---------- */
+.dash-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  flex-wrap:wrap;
+  gap:18px;
+}
+.dash-link{
+  font-size:13.5px;
+  color:var(--ink);
+  text-decoration:underline;
+  text-underline-offset:3px;
+  cursor:pointer;
+  background:none;
+  border:none;
+  font-family:'IBM Plex Sans', sans-serif;
+  padding:0;
+}
+
+.period-tabs{
+  display:flex;
+  gap:24px;
+  margin-top:30px;
+  border-bottom:1px solid var(--border);
+}
+.period-tab{
+  background:none;
+  border:none;
+  font-family:'IBM Plex Sans', sans-serif;
+  font-size:14px;
+  font-weight:500;
+  color:var(--ink-soft);
+  padding:0 0 12px;
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+}
+.period-tab.active{
+  color:var(--ink);
+  border-bottom-color:var(--ink);
+  font-weight:600;
+}
+
+.split-bar{
+  margin-top:26px;
+  height:14px;
+  border-radius:7px;
+  overflow:hidden;
+  display:flex;
+  background:var(--surface-alt);
+}
+.split-bar span{display:block; height:100%;}
+
+.split-legend{
+  display:flex;
+  justify-content:space-between;
+  margin-top:8px;
+  font-size:11.5px;
+  color:var(--ink-soft);
+  font-family:'IBM Plex Mono', monospace;
+  max-width:520px;
+}
+
+.stat-grid{
+  margin-top:28px;
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:14px;
+}
+.stat-row{
+  background:var(--surface);
+  border-radius:12px;
+  border-left:4px solid var(--ink);
+  padding:20px 20px;
+  cursor:pointer;
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+.stat-row:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 22px rgba(30,42,40,0.10);
+}
+.stat-row.realisees{border-left-color:var(--done);}
+.stat-row.encours{border-left-color:var(--normal);}
+.stat-row.nonrealisees{border-left-color:var(--urgent);}
+
+.stat-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.stat-label{font-size:14.5px; font-weight:600;}
+.stat-sub{font-size:12px; color:var(--ink-soft); margin-top:3px;}
+.stat-num{
+  font-family:'Space Grotesk', sans-serif;
+  font-size:34px;
+  font-weight:700;
+  margin-top:14px;
+}
+
+.dash-foot{
+  margin-top:34px;
+  font-size:13px;
+  color:var(--ink-soft);
+  line-height:1.6;
+  border-top:1px solid var(--border);
+  padding-top:18px;
+  max-width:640px;
+}
+
+/* ---------- Tasks view ---------- */
+.today-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.today-count{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:13px;
+  color:var(--ink-soft);
+}
+
+.tasks-columns{
+  margin-top:30px;
+  display:grid;
+  grid-template-columns:1.15fr 0.85fr;
+  gap:40px;
+  align-items:start;
+}
+.tasks-col-head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+}
+.tasks-col-title{
+  font-family:'Space Grotesk', sans-serif;
+  font-size:16px;
+  font-weight:700;
+}
+
+.filter-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:16px;
+}
+.filter-chips{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.chip{
+  padding:6px 13px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  font-size:12px;
+  font-family:'IBM Plex Sans', sans-serif;
+  color:var(--ink-soft);
+  cursor:pointer;
+}
+.chip.active{background:var(--ink); color:#fff; border-color:var(--ink);}
+
+.sort-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.sort-label{
+  font-size:12px;
+  color:var(--ink-soft);
+  white-space:nowrap;
+}
+.unit-toggle{display:flex; gap:6px;}
+.unit-btn, .sort-btn{
+  border:1px solid var(--border);
+  background:var(--surface);
+  border-radius:8px;
+  font-size:12.5px;
+  padding:6px 12px;
+  color:var(--ink-soft);
+  cursor:pointer;
+  font-family:'IBM Plex Sans', sans-serif;
+}
+.unit-btn.active, .sort-btn.active{background:var(--ink); color:#fff; border-color:var(--ink);}
+
+.task-list{
+  margin-top:16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.task{
+  background:var(--surface);
+  border-radius:10px;
+  border-left:4px solid var(--urgent);
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px 16px;
+  cursor:pointer;
+  transition:box-shadow .12s ease;
+}
+.task:hover{box-shadow:0 8px 18px rgba(30,42,40,0.08);}
+.task.important{border-left-color:var(--important);}
+.task.normale{border-left-color:var(--normal);}
+.task.missed{border-left-color:var(--surface-alt); background:#F4F2EC;}
+.task.done{background:var(--done-bg); border-left-color:var(--done);}
+
+.check{
+  width:20px; height:20px;
+  border-radius:50%;
+  border:1.5px solid var(--ink-soft);
+  flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+}
+.task.done .check{
+  background:var(--done);
+  border-color:var(--done);
+  color:#fff;
+  font-size:12px;
+}
+.task-body{flex:1; min-width:0;}
+.task-title{font-size:14.5px; font-weight:500;}
+.task.done .task-title{text-decoration:line-through; color:var(--ink-soft);}
+.task-meta{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11.5px;
+  color:var(--ink-soft);
+  margin-top:2px;
+}
+.task-flag{
+  font-size:10.5px;
+  color:var(--urgent);
+  font-weight:600;
+  white-space:nowrap;
+}
+.task-chevron{
+  color:var(--ink-soft);
+  font-size:17px;
+  flex-shrink:0;
+}
+
+.empty-note{
+  margin-top:24px;
+  text-align:center;
+  color:var(--ink-soft);
+  font-size:13px;
+  line-height:1.6;
+}
+
+/* ---------- Upcoming / archive day groups ---------- */
+.archive-day{margin-top:22px;}
+.archive-day:first-of-type{margin-top:16px;}
+.archive-day-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+}
+.archive-day-label{
+  font-size:13px;
+  font-weight:600;
+  text-transform:capitalize;
+}
+.archive-day-sub{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  color:var(--ink-soft);
+}
+.archive-list{
+  margin-top:10px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.archive-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:9px 11px;
+  border-radius:8px;
+  background:var(--surface);
+  border-left:3px solid var(--normal);
+  cursor:pointer;
+}
+.archive-item:hover{box-shadow:0 6px 14px rgba(30,42,40,0.07);}
+.archive-item.done{border-left-color:var(--done);}
+.archive-item.missed{border-left-color:var(--urgent);}
+.archive-item.urgent{border-left-color:var(--urgent);}
+.archive-item.important{border-left-color:var(--important);}
+.archive-item.normale{border-left-color:var(--normal);}
+.archive-item-title{font-size:13px; flex:1;}
+.archive-item.done .archive-item-title{color:var(--ink-soft);}
+.archive-item-status{
+  font-size:10.5px;
+  font-weight:600;
+  white-space:nowrap;
+  color:var(--ink-soft);
+}
+.archive-item.done .archive-item-status{color:var(--done);}
+.archive-item.missed .archive-item-status{color:var(--urgent);}
+
+/* ---------- Archives view ---------- */
+.archive-grid{
+  margin-top:26px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+  gap:20px;
+  align-items:start;
+}
+.archive-grid .archive-day{
+  margin-top:0;
+  background:var(--surface);
+  border-radius:12px;
+  padding:18px 18px 20px;
+  border:1px solid var(--border);
+}
+.archive-grid .archive-item{background:var(--bg);}
+
+/* ---------- Floating new task button (secondary entry point) ---------- */
+.fab{
+  position:fixed;
+  right:40px;
+  bottom:40px;
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  border:none;
+  background:var(--ink);
+  color:#fff;
+  font-family:'Space Grotesk', sans-serif;
+  font-size:26px;
+  line-height:1;
+  cursor:pointer;
+  box-shadow:0 14px 28px rgba(30,42,40,0.28);
+  z-index:5;
+}
+.fab:active{transform:scale(0.96);}
+
+/* ---------- Drawer (nouvelle tâche / détail) ---------- */
+.drawer-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(30,42,40,0.32);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s ease;
+  z-index:20;
+}
+.drawer-overlay.open{opacity:1; pointer-events:auto;}
+
+.drawer{
+  position:fixed;
+  top:0; right:0; bottom:0;
+  width:420px;
+  max-width:92vw;
+  background:var(--bg);
+  border-left:1px solid var(--border);
+  padding:28px 32px 32px;
+  overflow-y:auto;
+  transform:translateX(100%);
+  transition:transform .25s ease;
+  z-index:21;
+}
+.drawer-overlay.open .drawer{transform:translateX(0);}
+
+.drawer-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+}
+.drawer-close{
+  border:none;
+  background:none;
+  font-size:20px;
+  color:var(--ink-soft);
+  cursor:pointer;
+  line-height:1;
+  padding:4px;
+}
+
+.field{margin-top:22px;}
+.field label{
+  display:block;
+  font-size:12.5px;
+  font-weight:600;
+  color:var(--ink-soft);
+  margin-bottom:6px;
+}
+.field input[type=text], .field textarea, .field input[type=datetime-local]{
+  width:100%;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:11px 12px;
+  font-family:'IBM Plex Sans', sans-serif;
+  font-size:14px;
+  color:var(--ink);
+}
+.field textarea{resize:none; height:72px;}
+.field input[readonly], .field textarea[readonly]{
+  background:var(--surface-alt);
+  color:var(--ink-soft);
+}
+
+.duration-row{display:flex; gap:8px;}
+.duration-row input{
+  width:90px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:11px 12px;
+  font-family:'IBM Plex Mono', monospace;
+  font-size:14px;
+}
+.duration-row .unit-toggle{flex:1;}
+.duration-row .unit-btn{flex:1;}
+
+.priority-row{display:flex; gap:8px;}
+.priority-btn{
+  flex:1;
+  padding:10px 0;
+  border-radius:8px;
+  border:1.5px solid var(--border);
+  background:var(--surface);
+  font-size:13px;
+  font-weight:500;
+  color:var(--ink-soft);
+  cursor:pointer;
+}
+.priority-btn[data-p="normale"].active{background:var(--normal); border-color:var(--normal); color:#fff;}
+.priority-btn[data-p="important"].active{background:var(--important); border-color:var(--important); color:#fff;}
+.priority-btn[data-p="urgent"].active{background:var(--urgent); border-color:var(--urgent); color:#fff;}
+
+.submit-btn{
+  margin-top:32px;
+  width:100%;
+  padding:15px 0;
+  border:none;
+  border-radius:10px;
+  background:var(--ink);
+  color:#fff;
+  font-family:'Space Grotesk', sans-serif;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+}
+.submit-btn:active{opacity:.85;}
+
+.delete-link{
+  display:block;
+  width:100%;
+  margin-top:14px;
+  padding:4px 0;
+  border:none;
+  background:none;
+  color:var(--urgent);
+  font-family:'IBM Plex Sans', sans-serif;
+  font-size:12.5px;
+  font-weight:500;
+  text-align:center;
+  cursor:pointer;
+}
+
+.confirm-note{
+  margin-top:12px;
+  text-align:center;
+  font-size:12.5px;
+  color:var(--done);
+  font-weight:600;
+  height:16px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1000px){
+  .tasks-columns{grid-template-columns:1fr;}
+  .stat-grid{grid-template-columns:1fr;}
+}
+@media (max-width:760px){
+  .app{flex-direction:column;}
+  .sidebar{
+    width:100%;
+    height:auto;
+    position:static;
+    flex-direction:row;
+    align-items:center;
+    gap:20px;
+    padding:16px 20px;
+  }
+  .nav{flex-direction:row;}
+  .sidebar-foot{margin-top:0; padding-top:0; border-top:none;}
+  .new-task-btn{white-space:nowrap; padding:10px 16px;}
+  .main{padding:32px 20px 80px;}
+  .drawer{width:100%; max-width:100%;}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- BARRE LATÉRALE -->
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark"></span>
+      <span class="brand-name">Task.</span>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-item active" data-screen="dashboard"><span class="dot"></span>Tableau de bord</button>
+      <button class="nav-item" data-screen="tasks"><span class="dot"></span>Tâches</button>
+      <button class="nav-item" data-screen="archives"><span class="dot"></span>Archives</button>
+    </nav>
+
+    <div class="sidebar-foot">
+      <button class="new-task-btn" id="fab-new"><span class="plus">+</span>Nouvelle tâche</button>
+    </div>
+  </aside>
+
+  <!-- CONTENU PRINCIPAL -->
+  <main class="main">
+
+    <!-- VUE : TABLEAU DE BORD -->
+    <section class="view active" id="view-dashboard">
+      <div class="view-inner">
+        <div class="dash-head">
+          <div>
+            <h1>Bonjour</h1>
+            <div class="date-line" id="today-date-1"></div>
+          </div>
+          <button class="dash-link" id="dash-tasks-link">Voir mes tâches d'aujourd'hui</button>
+        </div>
+
+        <div class="period-tabs">
+          <button class="period-tab active" data-period="jour">Jour</button>
+          <button class="period-tab" data-period="semaine">Semaine</button>
+          <button class="period-tab" data-period="mois">Mois</button>
+        </div>
+
+        <div class="split-bar" id="split-bar"></div>
+        <div class="split-legend">
+          <span>Réalisées</span><span>À faire</span><span>Non réalisées</span>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-row realisees" data-goto="done">
+            <div class="stat-top">
+              <div>
+                <div class="stat-label">Réalisées</div>
+                <div class="stat-sub">travail accompli</div>
+              </div>
+            </div>
+            <div class="stat-num" id="stat-done">0</div>
+          </div>
+          <div class="stat-row encours" data-goto="pending">
+            <div class="stat-top">
+              <div>
+                <div class="stat-label">À faire</div>
+                <div class="stat-sub">planifiées, pas encore l'heure</div>
+              </div>
+            </div>
+            <div class="stat-num" id="stat-pending">0</div>
+          </div>
+          <div class="stat-row nonrealisees" data-goto="missed">
+            <div class="stat-top">
+              <div>
+                <div class="stat-label">Non réalisées</div>
+                <div class="stat-sub">reportées ou abandonnées</div>
+              </div>
+            </div>
+            <div class="stat-num" id="stat-missed">0</div>
+          </div>
+        </div>
+
+        <div class="dash-foot" id="dash-foot"></div>
+      </div>
+    </section>
+
+    <!-- VUE : TÂCHES -->
+    <section class="view" id="view-tasks">
+      <div class="view-inner">
+        <div class="today-head">
+          <div>
+            <h1>Tâches</h1>
+            <div class="date-line" id="today-date-2"></div>
+          </div>
+          <div class="today-count" id="today-count"></div>
+        </div>
+
+        <div class="tasks-columns">
+          <div class="tasks-col tasks-col-today">
+            <div class="tasks-col-head">
+              <div class="tasks-col-title">Aujourd'hui</div>
+            </div>
+            <div class="filter-row">
+              <div class="filter-chips" id="today-filter-chips">
+                <button class="chip active" data-filter="all">Toutes</button>
+                <button class="chip" data-filter="pending">À faire</button>
+                <button class="chip" data-filter="done">Réalisées</button>
+                <button class="chip" data-filter="missed">Non réalisées</button>
+              </div>
+              <div class="sort-row" id="task-sort-row">
+                <span class="sort-label">Trier par</span>
+                <div class="unit-toggle">
+                  <button class="sort-btn active" data-sort="priority">Priorité</button>
+                  <button class="sort-btn" data-sort="time">Heure</button>
+                </div>
+              </div>
+            </div>
+            <div class="task-list" id="task-list"></div>
+            <div class="empty-note" id="tasks-empty-note">Cliquez sur le rond pour marquer une tâche comme réalisée.</div>
+          </div>
+
+          <div class="tasks-col tasks-col-upcoming">
+            <div class="tasks-col-head">
+              <div class="tasks-col-title">À venir</div>
+            </div>
+            <div id="upcoming-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VUE : ARCHIVES -->
+    <section class="view" id="view-archives">
+      <div class="view-inner">
+        <h1>Archives</h1>
+        <div class="date-line">Historique des jours précédents</div>
+
+        <div class="filter-chips" id="archive-filter-chips" style="margin-top:20px;">
+          <button class="chip active" data-filter="all">Toutes</button>
+          <button class="chip" data-filter="done">Réalisées</button>
+          <button class="chip" data-filter="missed">Non réalisées</button>
+        </div>
+
+        <div class="archive-grid" id="archive-list"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- BOUTON FLOTTANT (raccourci secondaire) -->
+<button class="fab" id="fab-shortcut" aria-label="Nouvelle tâche">+</button>
+
+<!-- PANNEAU LATÉRAL : NOUVELLE TÂCHE / DÉTAIL D'UNE TÂCHE -->
+<div class="drawer-overlay" id="sheet-overlay">
+  <div class="drawer">
+    <div class="drawer-head">
+      <div>
+        <h1 style="font-size:20px;" id="sheet-title">Nouvelle tâche</h1>
+        <div class="date-line" id="sheet-subtitle">Sera ajoutée à la liste du jour</div>
+      </div>
+      <button class="drawer-close" id="sheet-close">✕</button>
+    </div>
+
+    <div class="field">
+      <label>Titre</label>
+      <input type="text" id="f-title" placeholder="Ex. Réviser le chapitre 3">
+    </div>
+
+    <div class="field" id="field-desc">
+      <label>Description (optionnel)</label>
+      <textarea id="f-desc" placeholder="Notes ou sous-étapes"></textarea>
+    </div>
+
+    <div class="field" id="field-datetime">
+      <label>Date &amp; heure</label>
+      <input type="datetime-local" id="f-datetime">
+    </div>
+
+    <div class="field" id="field-date-static" style="display:none;">
+      <label>Date &amp; heure</label>
+      <div class="date-line" id="static-date-text" style="margin-top:0;"></div>
+    </div>
+
+    <div class="field" id="field-duration">
+      <label>Durée estimée</label>
+      <div class="duration-row">
+        <input type="text" id="f-duration" placeholder="30">
+        <div class="unit-toggle">
+          <button class="unit-btn active" data-unit="min">min</button>
+          <button class="unit-btn" data-unit="h">h</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="field" id="field-priority">
+      <label>Statut (priorité)</label>
+      <div class="priority-row">
+        <button class="priority-btn" data-p="normale">Normale</button>
+        <button class="priority-btn" data-p="important">Important</button>
+        <button class="priority-btn active" data-p="urgent">Urgent</button>
+      </div>
+    </div>
+
+    <div class="field" id="field-archive-status" style="display:none;">
+      <label>Statut</label>
+      <div class="date-line" id="static-status-text" style="margin-top:0;"></div>
+    </div>
+
+    <button class="submit-btn" id="submit-btn">Créer la tâche</button>
+    <button class="delete-link" id="delete-btn" style="display:none;">Supprimer la tâche</button>
+    <div class="confirm-note" id="confirm-note"></div>
+  </div>
+</div>
+
+<script>
+// ---------- État ----------
+let tasks = [
+  {id:1, title:"Envoyer le rapport client", description:"Compiler les chiffres de la semaine et l'envoyer à l'équipe direction avant midi.", time:"08:30", duration:"20 min", priority:"urgent", status:"missed"},
+  {id:2, title:"Réviser le chapitre 3", description:"Relire les notes de cours et refaire les exercices 4 à 9.", time:"10:00", duration:"45 min", priority:"important", status:"done"},
+  {id:3, title:"Appeler la banque", description:"Demander où en est le virement envoyé la semaine dernière.", time:"14:00", duration:"15 min", priority:"urgent", status:"pending"},
+  {id:4, title:"Ranger le bureau", description:"", time:"17:30", duration:"20 min", priority:"normale", status:"pending"},
+  {id:5, title:"Lire 10 pages", description:"Reprendre le roman là où je m'étais arrêté, chapitre 6.", time:"21:00", duration:"30 min", priority:"normale", status:"pending"},
+];
+let nextId = 6;
+
+const archives = [
+  {label:"lundi 31 août", items:[
+    {title:"Préparer la réunion d'équipe", description:"Slides + ordre du jour envoyés à l'équipe.", status:"done"},
+    {title:"Payer la facture internet", description:"", status:"done"},
+    {title:"Trier les e-mails en retard", description:"Boîte de réception à vider, environ 40 messages.", status:"missed"},
+  ]},
+  {label:"dimanche 30 août", items:[
+    {title:"Sortir courir 30 min", description:"", status:"done"},
+    {title:"Appeler grand-mère", description:"", status:"done"},
+  ]},
+  {label:"samedi 29 août", items:[
+    {title:"Réviser le budget du mois", description:"Comparer les dépenses réelles au prévisionnel.", status:"missed"},
+    {title:"Nettoyer la voiture", description:"", status:"missed"},
+    {title:"Lire un chapitre", description:"", status:"done"},
+  ]},
+];
+
+const upcoming = [
+  {label:"demain, jeudi 3 sept.", items:[
+    {id:'u1', title:"Préparer la présentation", description:"Finaliser les 12 slides et répéter une fois à voix haute.", time:"09:00", duration:"1 h", priority:"important"},
+    {id:'u2', title:"Rendez-vous dentiste", description:"", time:"16:30", duration:"30 min", priority:"urgent"},
+  ]},
+  {label:"vendredi 4 sept.", items:[
+    {id:'u3', title:"Livrer le rapport mensuel", description:"Version finale à envoyer au responsable avant 11h.", time:"11:00", duration:"20 min", priority:"urgent"},
+  ]},
+  {label:"lundi 7 sept.", items:[
+    {id:'u4', title:"Réunion de suivi de projet", description:"", time:"10:00", duration:"45 min", priority:"normale"},
+  ]},
+];
+
+const priorityOrder = {urgent:0, important:1, normale:2};
+let currentTaskFilter = 'all';
+let currentArchiveFilter = 'all';
+let currentTaskSort = 'priority';
+
+function formatDate(){
+  const d = new Date();
+  return d.toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long'});
+}
+
+function render(){
+  document.getElementById('today-date-1').textContent = formatDate();
+  document.getElementById('today-date-2').textContent = formatDate();
+
+  const done = tasks.filter(t=>t.status==='done').length;
+  const pending = tasks.filter(t=>t.status==='pending').length;
+  const missed = tasks.filter(t=>t.status==='missed').length;
+  const total = tasks.length || 1;
+
+  document.getElementById('stat-done').textContent = done;
+  document.getElementById('stat-pending').textContent = pending;
+  document.getElementById('stat-missed').textContent = missed;
+
+  const bar = document.getElementById('split-bar');
+  bar.innerHTML = `
+    <span style="width:${done/total*100}%; background:var(--done)"></span>
+    <span style="width:${pending/total*100}%; background:var(--normal)"></span>
+    <span style="width:${missed/total*100}%; background:var(--urgent)"></span>
+  `;
+
+  const foot = document.getElementById('dash-foot');
+  if(missed > 0){
+    foot.textContent = `${missed} tâche${missed>1?'s':''} non réalisée${missed>1?'s':''} aujourd'hui — l'heure prévue est dépassée sans action.`;
+  } else {
+    foot.textContent = `Aucune tâche en retard pour l'instant. Continuez comme ça.`;
+  }
+
+  document.getElementById('today-count').textContent = `${tasks.filter(t=>t.status!=='done').length} restantes`;
+
+  const filteredTasks = currentTaskFilter === 'all' ? tasks : tasks.filter(t=>t.status===currentTaskFilter);
+  const sorted = [...filteredTasks].sort((a,b)=>{
+    if(currentTaskSort === 'time'){
+      return a.time.localeCompare(b.time);
+    }
+    return priorityOrder[a.priority]-priorityOrder[b.priority];
+  });
+  const list = document.getElementById('task-list');
+  list.innerHTML = '';
+  document.getElementById('tasks-empty-note').style.display = sorted.length ? 'none' : 'block';
+  if(sorted.length === 0){
+    list.innerHTML = '<div class="empty-note" style="margin-top:4px;">Aucune tâche ne correspond à ce filtre.</div>';
+    document.getElementById('tasks-empty-note').style.display = 'none';
+  }
+  sorted.forEach(t=>{
+    const row = document.createElement('div');
+    row.className = `task ${t.priority} ${t.status==='done'?'done':''} ${t.status==='missed'?'missed':''}`;
+    row.innerHTML = `
+      <div class="check">${t.status==='done'?'✓':''}</div>
+      <div class="task-body">
+        <div class="task-title">${t.title}</div>
+        <div class="task-meta">${t.time} · ${t.duration}</div>
+      </div>
+      ${t.status==='missed' ? '<div class="task-flag">Non réalisée</div>' : ''}
+      <div class="task-chevron">›</div>
+    `;
+    row.querySelector('.check').addEventListener('click', (e)=>{
+      e.stopPropagation();
+      t.status = (t.status === 'done') ? 'pending' : 'done';
+      render();
+    });
+    row.addEventListener('click', ()=> openSheet('edit-today', t));
+    list.appendChild(row);
+  });
+
+  const upcomingWrap = document.getElementById('upcoming-list');
+  upcomingWrap.innerHTML = '';
+  upcoming.forEach((day, dayIdx)=>{
+    const dayEl = document.createElement('div');
+    dayEl.className = 'archive-day';
+    dayEl.innerHTML = `
+      <div class="archive-day-head">
+        <div class="archive-day-label">${day.label}</div>
+        <div class="archive-day-sub">${day.items.length} tâche${day.items.length>1?'s':''}</div>
+      </div>
+      <div class="archive-list">
+        ${day.items.map((i, itemIdx)=>`
+          <div class="archive-item ${i.priority}" data-day-idx="${dayIdx}" data-item-idx="${itemIdx}">
+            <div class="archive-item-title">${i.title}</div>
+            <div class="archive-item-status">${i.time}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    upcomingWrap.appendChild(dayEl);
+  });
+
+  const archiveWrap = document.getElementById('archive-list');
+  archiveWrap.innerHTML = '';
+  archives.forEach((day, dayIdx)=>{
+    const doneCount = day.items.filter(i=>i.status==='done').length;
+    const missedCount = day.items.filter(i=>i.status==='missed').length;
+    const visibleItems = day.items
+      .map((it, itemIdx)=>({it, itemIdx}))
+      .filter(x => currentArchiveFilter === 'all' || x.it.status === currentArchiveFilter);
+    if(visibleItems.length === 0) return;
+    const dayEl = document.createElement('div');
+    dayEl.className = 'archive-day';
+    dayEl.innerHTML = `
+      <div class="archive-day-head">
+        <div class="archive-day-label">${day.label}</div>
+        <div class="archive-day-sub">${doneCount} réalisée${doneCount>1?'s':''} · ${missedCount} non réalisée${missedCount>1?'s':''}</div>
+      </div>
+      <div class="archive-list">
+        ${visibleItems.map(x=>`
+          <div class="archive-item ${x.it.status}" data-day-idx="${dayIdx}" data-item-idx="${x.itemIdx}">
+            <div class="archive-item-title">${x.it.title}</div>
+            <div class="archive-item-status">${x.it.status==='done'?'Réalisée':'Non réalisée'}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    archiveWrap.appendChild(dayEl);
+  });
+  if(archiveWrap.innerHTML === ''){
+    archiveWrap.innerHTML = '<div class="empty-note" style="margin-top:4px;">Aucune tâche ne correspond à ce filtre.</div>';
+  }
+}
+
+// ---------- Ouverture des détails (délégation d'événements) ----------
+document.getElementById('upcoming-list').addEventListener('click', (e)=>{
+  const item = e.target.closest('.archive-item');
+  if(!item) return;
+  const day = upcoming[item.dataset.dayIdx];
+  const task = day.items[item.dataset.itemIdx];
+  openSheet('edit-upcoming', task, day.label);
+});
+document.getElementById('archive-list').addEventListener('click', (e)=>{
+  const item = e.target.closest('.archive-item');
+  if(!item) return;
+  const day = archives[item.dataset.dayIdx];
+  const task = day.items[item.dataset.itemIdx];
+  openSheet('view-archive', task, day.label);
+});
+
+// ---------- Navigation ----------
+document.querySelectorAll('.nav-item').forEach(navItem=>{
+  navItem.addEventListener('click', ()=>{
+    document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(s=>s.classList.remove('active'));
+    navItem.classList.add('active');
+    document.getElementById('view-'+navItem.dataset.screen).classList.add('active');
+  });
+});
+
+// ---------- Période du tableau de bord (visuel uniquement) ----------
+document.querySelectorAll('.period-tabs .period-tab').forEach(pt=>{
+  pt.addEventListener('click', ()=>{
+    document.querySelectorAll('.period-tabs .period-tab').forEach(b=>b.classList.remove('active'));
+    pt.classList.add('active');
+  });
+});
+
+// ---------- Filtres (Tâches du jour + Archives) ----------
+function setTaskFilter(f){
+  currentTaskFilter = f;
+  document.querySelectorAll('#today-filter-chips .chip').forEach(b=>b.classList.toggle('active', b.dataset.filter===f));
+  render();
+}
+document.querySelectorAll('#today-filter-chips .chip').forEach(c=>{
+  c.addEventListener('click', ()=> setTaskFilter(c.dataset.filter));
+});
+document.querySelectorAll('#task-sort-row .sort-btn').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    currentTaskSort = b.dataset.sort;
+    document.querySelectorAll('#task-sort-row .sort-btn').forEach(x=>x.classList.toggle('active', x===b));
+    render();
+  });
+});
+document.querySelectorAll('#archive-filter-chips .chip').forEach(c=>{
+  c.addEventListener('click', ()=>{
+    currentArchiveFilter = c.dataset.filter;
+    document.querySelectorAll('#archive-filter-chips .chip').forEach(b=>b.classList.toggle('active', b.dataset.filter===currentArchiveFilter));
+    render();
+  });
+});
+
+// ---------- Liens du tableau de bord vers Tâches ----------
+function goToTasks(filter){
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(s=>s.classList.remove('active'));
+  document.querySelector('.nav-item[data-screen="tasks"]').classList.add('active');
+  document.getElementById('view-tasks').classList.add('active');
+  setTaskFilter(filter || 'all');
+}
+document.getElementById('dash-tasks-link').addEventListener('click', ()=> goToTasks('all'));
+document.querySelectorAll('.stat-row').forEach(row=>{
+  row.addEventListener('click', ()=> goToTasks(row.dataset.goto));
+});
+
+// ---------- Panneau nouvelle tâche / détail d'une tâche ----------
+const overlay = document.getElementById('sheet-overlay');
+let sheetMode = 'create';
+let editingId = null;
+
+function todayISO(){
+  return new Date().toISOString().slice(0,10);
+}
+function parseDuration(str){
+  if(!str) return {value:'', unit:'min'};
+  const parts = str.trim().split(' ');
+  return {value: parts[0] === '—' ? '' : parts[0], unit: parts[1] === 'h' ? 'h' : 'min'};
+}
+function setActiveUnit(unit){
+  document.querySelectorAll('.unit-btn').forEach(b=> b.classList.toggle('active', b.dataset.unit===unit));
+}
+function setActivePriority(p){
+  document.querySelectorAll('.priority-btn').forEach(b=> b.classList.toggle('active', b.dataset.p===p));
+}
+
+function openSheet(mode, data, dayLabel){
+  sheetMode = mode;
+  editingId = data ? data.id : null;
+
+  const fieldDatetime = document.getElementById('field-datetime');
+  const fieldDateStatic = document.getElementById('field-date-static');
+  const fieldDuration = document.getElementById('field-duration');
+  const fieldPriority = document.getElementById('field-priority');
+  const fieldDesc = document.getElementById('field-desc');
+  const fieldArchiveStatus = document.getElementById('field-archive-status');
+  const submitBtn = document.getElementById('submit-btn');
+  const deleteBtn = document.getElementById('delete-btn');
+  const title = document.getElementById('sheet-title');
+  const subtitle = document.getElementById('sheet-subtitle');
+
+  fieldDatetime.style.display = 'block';
+  fieldDateStatic.style.display = 'none';
+  fieldDuration.style.display = 'block';
+  fieldPriority.style.display = 'block';
+  fieldDesc.style.display = 'block';
+  fieldArchiveStatus.style.display = 'none';
+  submitBtn.style.display = 'block';
+  deleteBtn.style.display = 'none';
+  document.getElementById('f-title').readOnly = false;
+  document.getElementById('f-desc').readOnly = false;
+
+  if(mode === 'create'){
+    title.textContent = 'Nouvelle tâche';
+    subtitle.textContent = "Sera ajoutée à la liste du jour";
+    document.getElementById('f-title').value = '';
+    document.getElementById('f-desc').value = '';
+    document.getElementById('f-datetime').value = '';
+    document.getElementById('f-duration').value = '';
+    setActiveUnit('min');
+    setActivePriority('urgent');
+    submitBtn.textContent = 'Créer la tâche';
+
+  } else if(mode === 'edit-today'){
+    title.textContent = 'Modifier la tâche';
+    subtitle.textContent = "Tâche d'aujourd'hui";
+    document.getElementById('f-title').value = data.title;
+    document.getElementById('f-desc').value = data.description || '';
+    document.getElementById('f-datetime').value = `${todayISO()}T${data.time}`;
+    const d = parseDuration(data.duration);
+    document.getElementById('f-duration').value = d.value;
+    setActiveUnit(d.unit);
+    setActivePriority(data.priority);
+    submitBtn.textContent = 'Enregistrer les modifications';
+    deleteBtn.style.display = 'block';
+
+  } else if(mode === 'edit-upcoming'){
+    title.textContent = 'Modifier la tâche';
+    subtitle.textContent = 'Tâche à venir';
+    document.getElementById('f-title').value = data.title;
+    document.getElementById('f-desc').value = data.description || '';
+    fieldDatetime.style.display = 'none';
+    fieldDateStatic.style.display = 'block';
+    document.getElementById('static-date-text').textContent = `${dayLabel} à ${data.time}`;
+    const d = parseDuration(data.duration);
+    document.getElementById('f-duration').value = d.value;
+    setActiveUnit(d.unit);
+    setActivePriority(data.priority);
+    submitBtn.textContent = 'Enregistrer les modifications';
+    deleteBtn.style.display = 'block';
+
+  } else if(mode === 'view-archive'){
+    title.textContent = data.title;
+    subtitle.textContent = '';
+    document.getElementById('f-title').value = data.title;
+    document.getElementById('f-title').readOnly = true;
+    document.getElementById('f-desc').value = data.description || 'Aucune description.';
+    document.getElementById('f-desc').readOnly = true;
+    fieldDatetime.style.display = 'none';
+    fieldDuration.style.display = 'none';
+    fieldPriority.style.display = 'none';
+    fieldArchiveStatus.style.display = 'block';
+    document.getElementById('static-status-text').textContent = `${dayLabel} · ${data.status==='done' ? 'Réalisée' : 'Non réalisée'}`;
+    submitBtn.style.display = 'none';
+  }
+
+  document.getElementById('confirm-note').textContent = '';
+  overlay.classList.add('open');
+}
+
+document.getElementById('fab-new').addEventListener('click', ()=> openSheet('create'));
+document.getElementById('fab-shortcut').addEventListener('click', ()=> openSheet('create'));
+document.getElementById('sheet-close').addEventListener('click', ()=> overlay.classList.remove('open'));
+overlay.addEventListener('click', (e)=>{
+  if(e.target === overlay) overlay.classList.remove('open');
+});
+
+document.querySelectorAll('.unit-btn').forEach(b=>{
+  b.addEventListener('click', ()=> setActiveUnit(b.dataset.unit));
+});
+document.querySelectorAll('.priority-btn').forEach(b=>{
+  b.addEventListener('click', ()=> setActivePriority(b.dataset.p));
+});
+
+document.getElementById('delete-btn').addEventListener('click', ()=>{
+  if(sheetMode === 'edit-today'){
+    tasks = tasks.filter(t=> t.id !== editingId);
+  } else if(sheetMode === 'edit-upcoming'){
+    upcoming.forEach(day=>{ day.items = day.items.filter(i=> i.id !== editingId); });
+  }
+  render();
+  overlay.classList.remove('open');
+});
+
+document.getElementById('submit-btn').addEventListener('click', ()=>{
+  const title = document.getElementById('f-title').value.trim();
+  const note = document.getElementById('confirm-note');
+  if(!title){
+    note.style.color = 'var(--urgent)';
+    note.textContent = 'Donnez un titre à la tâche.';
+    return;
+  }
+  const description = document.getElementById('f-desc').value.trim();
+  const durationVal = document.getElementById('f-duration').value.trim() || '—';
+  const unit = document.querySelector('.unit-btn.active').dataset.unit;
+  const duration = `${durationVal} ${unit}`;
+  const priority = document.querySelector('.priority-btn.active').dataset.p;
+
+  if(sheetMode === 'create'){
+    const dt = document.getElementById('f-datetime').value;
+    const time = dt ? dt.split('T')[1] : '—';
+    tasks.push({ id: nextId++, title, description, time, duration, priority, status: 'pending' });
+    note.textContent = 'Tâche créée.';
+
+  } else if(sheetMode === 'edit-today'){
+    const dt = document.getElementById('f-datetime').value;
+    const time = dt ? dt.split('T')[1] : '—';
+    const t = tasks.find(t=> t.id === editingId);
+    Object.assign(t, {title, description, time, duration, priority});
+    note.textContent = 'Modifications enregistrées.';
+
+  } else if(sheetMode === 'edit-upcoming'){
+    for(const day of upcoming){
+      const t = day.items.find(i=> i.id === editingId);
+      if(t){ Object.assign(t, {title, description, duration, priority}); break; }
+    }
+    note.textContent = 'Modifications enregistrées.';
+  }
+
+  note.style.color = 'var(--done)';
+  render();
+  setTimeout(()=>{
+    note.textContent = '';
+    overlay.classList.remove('open');
+  }, 900);
+});
+
+render();
+</script>
+
+</body>
+</html>
