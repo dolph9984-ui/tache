@@ -4,15 +4,14 @@ import { PRIORITY } from '../../utils/meta';
 import styles from './TaskRow.module.css';
 
 export default function TaskRow({ task, onToggleDone, onPostpone, onOpen, showDate = false }) {
-  const stateClass = task.status === 'done' ? styles.done : task.status === 'missed' ? styles.missed : '';
   const canPostpone = task.status === 'pending' || task.status === 'missed';
   const priorityMeta = PRIORITY[task.priority];
 
   return (
-    <div className={`${styles.task} ${styles[task.priority] || ''} ${stateClass}`} onClick={() => onOpen(task)}>
+    <div className={`${styles.task} ${styles[task.priority] || ''}`} onClick={() => onOpen(task)}>
       <button
         type="button"
-        className={styles.check}
+        className={`${styles.check} ${task.status === 'done' ? styles.checkDone : ''}`}
         onClick={(e) => { e.stopPropagation(); onToggleDone(task.id); }}
         aria-label="Marquer comme réalisée"
       >
@@ -21,12 +20,7 @@ export default function TaskRow({ task, onToggleDone, onPostpone, onOpen, showDa
 
       <div className={styles.content}>
         <div className={styles.primary}>
-          <div className={styles.titleBlock}>
-            <div className={styles.title}>{task.title}</div>
-            {task.description?.trim() && (
-              <div className={styles.noteExcerpt}>{task.description.trim()}</div>
-            )}
-          </div>
+          <div className={styles.title}>{task.title}</div>
 
           <div className={styles.metaRow}>
             {showDate && (

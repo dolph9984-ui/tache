@@ -16,8 +16,6 @@
 .task:hover { box-shadow: var(--shadow-sm); }
 .task.important { border-left-color: var(--important); }
 .task.normale { border-left-color: var(--normal); }
-.task.missed { border-left-color: var(--missed); background: var(--surface-alt); }
-.task.done { background: var(--done-bg); border-left-color: var(--done); }
 
 .check {
   width: 22px;
@@ -33,7 +31,7 @@
   padding: 0;
 }
 
-.task.done .check {
+.checkDone {
   background: var(--done);
   border-color: var(--done);
   color: var(--surface);
@@ -52,35 +50,14 @@
   min-width: 0;
 }
 
-.titleBlock {
+.title {
   flex: 1;
   min-width: 0;
-}
-
-.title {
   font-size: 15px;
   font-weight: 600;
   line-height: 1.35;
   word-break: break-word;
 }
-
-.task.done .title {
-  text-decoration: line-through;
-  color: var(--ink-soft);
-  font-weight: 500;
-}
-
-.noteExcerpt {
-  margin-top: 3px;
-  font-size: 12.5px;
-  line-height: 1.4;
-  color: var(--ink-soft);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.task.done .noteExcerpt { opacity: 0.75; }
 
 .metaRow {
   display: flex;

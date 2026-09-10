@@ -140,7 +140,9 @@ export default function TaskCalendar({
   if (!open) return null;
 
   return (
-    <div className={styles.panel} ref={panelRef} role="dialog" aria-label="Choisir une date">
+    <>
+      <button type="button" className={styles.backdrop} onClick={onClose} aria-label="Fermer le calendrier" tabIndex={-1} />
+      <div className={styles.panel} ref={panelRef} role="dialog" aria-label="Choisir une date">
       <div className={styles.nav}>
         <button type="button" className={styles.navBtn} onClick={() => setViewMonth(addMonths(viewMonth, -1))} aria-label="Mois précédent">
           ‹
@@ -228,6 +230,7 @@ export default function TaskCalendar({
         )}
       </div>
     </div>
+    </>
   );
 }
 

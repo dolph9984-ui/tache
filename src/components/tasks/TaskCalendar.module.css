@@ -231,12 +231,42 @@
   text-overflow: ellipsis;
 }
 
+.backdrop {
+  display: none;
+}
+
 @media (max-width: 760px) {
-  .panel {
-    right: auto;
-    left: 50%;
-    transform: translateX(-50%);
+  .backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 49;
+    border: none;
+    padding: 0;
+    background: rgba(30, 42, 40, 0.4);
+    cursor: default;
   }
+
+  .panel {
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    top: auto;
+    bottom: calc(var(--bottom-nav-height, 49px) + env(safe-area-inset-bottom, 0px) + 12px);
+    width: auto;
+    max-width: none;
+    transform: none;
+    max-height: min(72vh, 520px);
+    overflow-y: auto;
+    z-index: 50;
+  }
+
+  .day {
+    height: 34px;
+    font-size: 12.5px;
+  }
+
+  .pad { height: 34px; }
 
   .trigger {
     height: 36px;
