@@ -1,7 +1,7 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(30, 42, 40, 0.32);
+  background: var(--overlay);
   opacity: 0;
   pointer-events: none;
   transition: opacity .2s ease;

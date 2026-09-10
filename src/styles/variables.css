@@ -33,6 +33,8 @@
   --shadow-sm: 0 8px 18px rgba(30, 42, 40, 0.08);
   --shadow-md: 0 10px 22px rgba(30, 42, 40, 0.10);
   --shadow-lg: 0 14px 28px rgba(30, 42, 40, 0.28);
+  --overlay: rgba(30, 42, 40, 0.32);
+  --line-shadow: rgba(30, 42, 40, 0.04);
 
   --font-display: 'Space Grotesk', sans-serif;
   --font-body: 'IBM Plex Sans', sans-serif;
@@ -41,56 +43,76 @@
   color-scheme: light;
 }
 
-/* ---------- Dark theme ----------
+/* ---------- Dark theme (confort visuel) ----------
+   Tons adoucis : moins de contraste pur, gris chauds, accents désaturés.
    Applied automatically on system preference, or forced via
    [data-theme] when the user picks a theme in Paramètres. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --ink: #EAF0ED;
-    --ink-soft: #9BAAA5;
-    --bg: #161C1A;
-    --bg-body: #0F1412;
-    --surface: #1C2422;
-    --surface-alt: #232C29;
-    --border: #2E3936;
+    --ink: #C8D4CF;
+    --ink-soft: #84908C;
+    --bg: #222826;
+    --bg-body: #1A1E1D;
+    --surface: #2B3130;
+    --surface-alt: #333A38;
+    --border: #3E4644;
 
-    --urgent-bg: #3A211B;
-    --important-bg: #392C17;
-    --normal-bg: #1E2B26;
+    --urgent: #D48474;
+    --urgent-bg: #3A2E2B;
+    --important: #C9A56A;
+    --important-bg: #38342A;
+    --normal: #7A9A8C;
+    --normal-bg: #2A332F;
 
-    --done: #1FB06B;
-    --done-bg: #16332A;
-    --pending: #3987E5;
-    --pending-bg: #16283A;
-    --missed: #E2573A;
-    --missed-bg: #3A211B;
-    --postponed: #D45FAE;
-    --postponed-bg: #3A1F32;
+    --done: #5FAF84;
+    --done-bg: #2A3832;
+    --pending: #7AAAD4;
+    --pending-bg: #2A343D;
+    --missed: #D48474;
+    --missed-bg: #3A2E2B;
+    --postponed: #C08AB4;
+    --postponed-bg: #352D33;
+
+    --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.18);
+    --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.22);
+    --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.28);
+    --overlay: rgba(10, 14, 13, 0.55);
+    --line-shadow: rgba(0, 0, 0, 0.12);
 
     color-scheme: dark;
   }
 }
+
 :root[data-theme="dark"] {
-  --ink: #EAF0ED;
-  --ink-soft: #9BAAA5;
-  --bg: #161C1A;
-  --bg-body: #0F1412;
-  --surface: #1C2422;
-  --surface-alt: #232C29;
-  --border: #2E3936;
+  --ink: #C8D4CF;
+  --ink-soft: #84908C;
+  --bg: #222826;
+  --bg-body: #1A1E1D;
+  --surface: #2B3130;
+  --surface-alt: #333A38;
+  --border: #3E4644;
 
-  --urgent-bg: #3A211B;
-  --important-bg: #392C17;
-  --normal-bg: #1E2B26;
+  --urgent: #D48474;
+  --urgent-bg: #3A2E2B;
+  --important: #C9A56A;
+  --important-bg: #38342A;
+  --normal: #7A9A8C;
+  --normal-bg: #2A332F;
 
-  --done: #1FB06B;
-  --done-bg: #16332A;
-  --pending: #3987E5;
-  --pending-bg: #16283A;
-  --missed: #E2573A;
-  --missed-bg: #3A211B;
-  --postponed: #D45FAE;
-  --postponed-bg: #3A1F32;
+  --done: #5FAF84;
+  --done-bg: #2A3832;
+  --pending: #7AAAD4;
+  --pending-bg: #2A343D;
+  --missed: #D48474;
+  --missed-bg: #3A2E2B;
+  --postponed: #C08AB4;
+  --postponed-bg: #352D33;
+
+  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.18);
+  --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.22);
+  --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.28);
+  --overlay: rgba(10, 14, 13, 0.55);
+  --line-shadow: rgba(0, 0, 0, 0.12);
 
   color-scheme: dark;
 }
