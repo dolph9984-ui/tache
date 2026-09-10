@@ -16,7 +16,23 @@
   padding: 0;
 }
 
-.periodTabs { display: flex; gap: 24px; margin-top: 30px; border-bottom: 1px solid var(--border); }
+.periodRow {
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: nowrap;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0;
+}
+
+.periodTabs {
+  display: flex;
+  gap: 24px;
+  flex-wrap: nowrap;
+  min-width: 0;
+}
 .periodTab {
   background: none;
   border: none;
@@ -28,6 +44,20 @@
   border-bottom: 2px solid transparent;
 }
 .periodTab.active { color: var(--ink); border-bottom-color: var(--ink); font-weight: 600; }
+
+.calendarWrap {
+  position: relative;
+  flex-shrink: 0;
+  margin-left: auto;
+  padding-bottom: 12px;
+}
+
+.rangeHint {
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}
 
 .overview {
   margin-top: 30px;
@@ -85,12 +115,14 @@
 }
 
 .foot {
-  margin-top: 34px;
+  margin-top: 28px;
+  padding: 16px 18px;
   font-size: 13px;
   color: var(--ink-soft);
-  line-height: 1.6;
-  border-top: 1px solid var(--border);
-  padding-top: 18px;
+  line-height: 1.55;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
   max-width: 640px;
 }
 
@@ -104,15 +136,23 @@
     align-items: flex-start;
     gap: 12px;
   }
-  .periodTabs {
+  .periodRow {
     margin-top: 20px;
+    gap: 10px;
+  }
+  .periodTabs {
     gap: 16px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    flex: 1;
   }
   .periodTabs::-webkit-scrollbar { display: none; }
   .periodTab { white-space: nowrap; flex-shrink: 0; }
+  .calendarWrap {
+    margin-left: auto;
+    padding-bottom: 12px;
+  }
   .overview {
     margin-top: 20px;
     padding: 20px 18px;

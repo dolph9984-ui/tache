@@ -63,7 +63,12 @@ export default function ArchivesView({ onOpenTask }) {
           />
         ))}
       </div>
-      {groups.length === 0 && <div className="emptyNote">Aucune tâche ne correspond à ce filtre.</div>}
+      {groups.length === 0 && (
+        <div className="emptyNote">
+          <div className="emptyNoteTitle">Aucun résultat</div>
+          <p className="emptyNoteDetail">Aucune tâche archivée ne correspond à ce filtre.</p>
+        </div>
+      )}
     </div>
   );
 }

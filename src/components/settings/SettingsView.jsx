@@ -150,7 +150,7 @@ export default function SettingsView() {
           />
         </Row>
 
-        <Row label="Tri par défaut" hint="Ordre appliqué à la liste « Aujourd'hui ».">
+        <Row label="Tri par défaut" hint="Ordre appliqué à la liste des tâches du jour sélectionné.">
           <Segmented
             value={settings.defaultSort}
             onChange={(v) => updateSettings({ defaultSort: v })}

@@ -56,23 +56,6 @@
 
 @media (max-width: 760px) {
   .sidebar {
-    width: 100%;
-    height: auto;
-    position: sticky;
-    top: 0;
-    z-index: 30;
-    flex-direction: row;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 20px;
-    padding-top: calc(12px + env(safe-area-inset-top, 0px));
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-    box-shadow: 0 1px 0 rgba(30, 42, 40, 0.04);
-  }
-
-  .nav,
-  .sidebarFoot {
     display: none;
   }
 }

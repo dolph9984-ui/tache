@@ -99,12 +99,21 @@ export default function TaskDrawer({ open, mode, task, defaultPriority, defaultD
         </div>
 
         <div className={styles.field}>
-          <label>Description (optionnel)</label>
-          <textarea
-            readOnly={isView} value={isView ? (form.description || 'Aucune description.') : form.description}
-            placeholder="Notes ou sous-étapes"
-            onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
-          />
+          <label>Notes (optionnel)</label>
+          {isView ? (
+            form.description.trim() ? (
+              <p className={styles.noteBody}>{form.description.trim()}</p>
+            ) : (
+              <p className={styles.noteEmpty}>Aucune note pour cette tâche.</p>
+            )
+          ) : (
+            <textarea
+              value={form.description}
+              placeholder="Sous-étapes, rappels, liens…"
+              rows={4}
+              onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+            />
+          )}
         </div>
 
         {isView ? (
@@ -169,6 +178,12 @@ export default function TaskDrawer({ open, mode, task, defaultPriority, defaultD
               </div>
             )}
 
+            {note.text && (
+              <div className={`${styles.formNote} ${note.error ? styles.formNoteError : styles.formNoteSuccess}`} role="status">
+                {note.text}
+              </div>
+            )}
+
             <button className={styles.submit} onClick={handleSubmit}>
               {isEdit ? 'Enregistrer les modifications' : 'Créer la tâche'}
             </button>
@@ -179,8 +194,6 @@ export default function TaskDrawer({ open, mode, task, defaultPriority, defaultD
             )}
           </>
         )}
-
-        {note.text && <div className={`${styles.confirmNote} ${note.error ? styles.error : ''}`}>{note.text}</div>}
       </div>
     </div>
   );

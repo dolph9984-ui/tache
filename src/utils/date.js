@@ -22,6 +22,47 @@ export function addDays(iso, n) {
   return toISO(d);
 }
 
+/** Premier jour du mois (ISO) contenant la date donnée. */
+export function startOfMonth(iso) {
+  const d = fromISO(iso);
+  d.setDate(1);
+  return toISO(d);
+}
+
+export function addMonths(iso, n) {
+  const d = fromISO(iso);
+  d.setMonth(d.getMonth() + n);
+  return toISO(d);
+}
+
+/** Nombre de jours dans le mois de `iso`. */
+export function daysInMonth(iso) {
+  const d = fromISO(iso);
+  return new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+}
+
+/** Index lundi=0 … dimanche=6 pour placer la date dans une grille hebdo. */
+export function weekdayIndexMonFirst(iso) {
+  const js = fromISO(iso).getDay();
+  return js === 0 ? 6 : js - 1;
+}
+
+export function monthYearLabel(iso) {
+  const label = fromISO(iso).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}
+
+export function clampISO(iso, min, max) {
+  if (iso < min) return min;
+  if (iso > max) return max;
+  return iso;
+}
+
+export function normalizeRange(from, to) {
+  if (!from || !to) return { from: from || to || '', to: to || from || '' };
+  return from <= to ? { from, to } : { from: to, to: from };
+}
+
 export function daysBetween(isoA, isoB) {
   const msPerDay = 24 * 60 * 60 * 1000;
   return Math.round((fromISO(isoB) - fromISO(isoA)) / msPerDay);

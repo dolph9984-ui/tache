@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { SettingsProvider, useSettings } from './context/SettingsContext';
 import { TasksProvider, useTasks } from './context/TasksContext';
 import { useReminders } from './hooks/useReminders';
+import AppHeader from './components/layout/AppHeader';
 import Sidebar from './components/layout/Sidebar';
 import BottomNav from './components/layout/BottomNav';
 import Dashboard from './components/dashboard/Dashboard';
@@ -19,6 +20,7 @@ function AppShell() {
 
   const [view, setView] = useState('dashboard');
   const [tasksFilter, setTasksFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [drawer, setDrawer] = useState({ open: false, mode: 'create', task: null });
 
   const openDrawer = (mode, task = null) => setDrawer({ open: true, mode, task });
@@ -27,6 +29,11 @@ function AppShell() {
   const goToTasks = (filter) => {
     setTasksFilter(TASKS_FILTER_KEYS.includes(filter) ? filter : 'all');
     setView('tasks');
+  };
+
+  const handleSearchChange = (query) => {
+    setSearchQuery(query);
+    if (query.trim()) setView('tasks');
   };
 
   const handleSave = (fields) => {
@@ -38,12 +45,22 @@ function AppShell() {
     <div className="app">
       <Sidebar activeView={view} onNavigate={setView} onNewTask={() => openDrawer('create')} />
 
-      <main className="main">
-        {view === 'dashboard' && <Dashboard onGoToTasks={goToTasks} />}
-        {view === 'tasks' && <TasksView key={tasksFilter} initialFilter={tasksFilter} onOpenTask={openDrawer} />}
-        {view === 'archives' && <ArchivesView onOpenTask={openDrawer} />}
-        {view === 'settings' && <SettingsView />}
-      </main>
+      <div className="contentColumn">
+        <AppHeader searchQuery={searchQuery} onSearchChange={handleSearchChange} />
+        <main className="main">
+          {view === 'dashboard' && <Dashboard onGoToTasks={goToTasks} />}
+          {view === 'tasks' && (
+            <TasksView
+              key={tasksFilter}
+              initialFilter={tasksFilter}
+              searchQuery={searchQuery}
+              onOpenTask={openDrawer}
+            />
+          )}
+          {view === 'archives' && <ArchivesView onOpenTask={openDrawer} />}
+          {view === 'settings' && <SettingsView />}
+        </main>
+      </div>
 
       <BottomNav
         activeView={view}

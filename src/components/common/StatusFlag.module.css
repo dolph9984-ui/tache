@@ -1,0 +1,42 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px 5px 8px;
+  background: var(--flag-bg);
+  color: var(--flag-color);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 50%, calc(100% - 6px) 100%, 0 100%);
+  padding-right: 14px;
+}
+
+.icon {
+  font-size: 10px;
+  line-height: 1;
+}
+
+.label {
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 760px) {
+  .flag {
+    font-size: 10px;
+    padding: 4px 12px 4px 7px;
+  }
+
+  .label {
+    display: none;
+  }
+}

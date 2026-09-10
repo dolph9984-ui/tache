@@ -40,8 +40,38 @@
   font-size: 14px;
   color: var(--ink);
 }
-.field textarea { resize: none; height: 72px; }
-.field input[readonly], .field textarea[readonly] { background: var(--surface-alt); color: var(--ink-soft); }
+.field textarea {
+  resize: vertical;
+  min-height: 96px;
+  max-height: min(42vh, 260px);
+  line-height: 1.5;
+}
+.field input[readonly] { background: var(--surface-alt); color: var(--ink-soft); }
+
+.noteBody {
+  margin: 0;
+  padding: 12px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.noteEmpty {
+  margin: 0;
+  padding: 12px 14px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  font-style: italic;
+}
 
 .dateRow { display: flex; gap: 8px; }
 .dateRow > div { flex: 1; }
@@ -92,7 +122,7 @@
 .postponeBtn:hover { border-color: var(--ink-soft); }
 
 .submit {
-  margin-top: 32px;
+  margin-top: 24px;
   width: 100%;
   padding: 15px 0;
   border: none;
@@ -120,8 +150,25 @@
   cursor: pointer;
 }
 
-.confirmNote { margin-top: 12px; text-align: center; font-size: 12.5px; font-weight: 600; height: 16px; color: var(--done); }
-.confirmNote.error { color: var(--urgent); }
+.formNote {
+  margin-top: 20px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.formNoteSuccess {
+  background: var(--done-bg);
+  color: var(--done);
+}
+
+.formNoteError {
+  background: var(--urgent-bg);
+  color: var(--urgent);
+}
 
 @media (max-width: 760px) {
   .drawer {
