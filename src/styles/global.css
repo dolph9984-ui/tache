@@ -38,6 +38,11 @@ button { font: inherit; color: inherit; }
   padding: 52px 56px 80px;
 }
 
+:root {
+  --bottom-nav-height: 49px;
+  --mobile-header-height: 52px;
+}
+
 .viewInner { max-width: 1040px; }
 
 .emptyNote {
@@ -50,5 +55,9 @@ button { font: inherit; color: inherit; }
 
 @media (max-width: 760px) {
   .app { flex-direction: column; }
-  .main { padding: 32px 20px 80px; }
+  .main {
+    padding: 20px 16px calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px) + 16px);
+  }
+
+  h1 { font-size: 24px; }
 }

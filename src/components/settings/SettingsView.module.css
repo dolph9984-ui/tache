@@ -94,3 +94,27 @@
   color: var(--done);
   font-weight: 600;
 }
+
+@media (max-width: 760px) {
+  .section {
+    margin-top: 20px;
+    padding: 4px 16px;
+    border-radius: 12px;
+  }
+  .sectionTitle { padding: 14px 0 2px; font-size: 14px; }
+  .row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px 0;
+  }
+  .rowControl {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  .segmented { width: 100%; }
+  .segBtn { flex: 1; text-align: center; padding: 8px 8px; }
+  .select, .timeInput { width: 100%; }
+  .actions { padding: 12px 0 16px; }
+  .btn { flex: 1; text-align: center; min-width: 0; }
+}

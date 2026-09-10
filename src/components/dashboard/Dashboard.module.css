@@ -97,17 +97,45 @@
 @media (max-width: 1000px) {
   .overview { flex-direction: column; align-items: stretch; }
 }
-@media (max-width: 640px) {
-  .statGrid {
+
+@media (max-width: 760px) {
+  .head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .periodTabs {
+    margin-top: 20px;
+    gap: 16px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
+    scrollbar-width: none;
+  }
+  .periodTabs::-webkit-scrollbar { display: none; }
+  .periodTab { white-space: nowrap; flex-shrink: 0; }
+  .overview {
+    margin-top: 20px;
+    padding: 20px 18px;
+    gap: 24px;
+  }
+  .headline { font-size: 17px; }
+  .statGrid {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
   .statCard {
-    flex: 0 0 min(100%, 320px);
-    padding: 14px 16px;
-    gap: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 14px 14px;
+    gap: 6px;
   }
-  .statLabel { font-size: 13px; }
-  .statNum { font-size: 24px; }
+  .statTop { width: 100%; }
+  .statNum { font-size: 22px; }
+  .foot { margin-top: 24px; font-size: 12.5px; }
+}
+
+@media (max-width: 640px) {
+  .statGrid { grid-template-columns: 1fr; }
 }

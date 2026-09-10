@@ -54,75 +54,25 @@
 .newTaskBtn:active { opacity: .85; }
 .newTaskBtn .plus { font-size: 17px; line-height: 1; }
 
-/* Bouton hamburger : masqué sur bureau, seul déclencheur du menu en mobile. */
-.menuToggle {
-  display: none;
-  width: 38px; height: 38px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  border-radius: 9px;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.menuToggle span,
-.menuToggle span::before,
-.menuToggle span::after {
-  content: '';
-  display: block;
-  width: 16px;
-  height: 1.5px;
-  background: var(--ink);
-  border-radius: 1px;
-  position: relative;
-  transition: transform .15s ease, opacity .15s ease;
-}
-.menuToggle span::before { position: absolute; top: -5px; }
-.menuToggle span::after { position: absolute; top: 5px; }
-.menuToggle.open span { background: transparent; }
-.menuToggle.open span::before { top: 0; transform: rotate(45deg); background: var(--ink); }
-.menuToggle.open span::after { top: 0; transform: rotate(-45deg); background: var(--ink); }
-
-.backdrop { display: none; }
-
 @media (max-width: 760px) {
   .sidebar {
     width: 100%;
     height: auto;
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 30;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
     gap: 12px;
-    padding: 14px 20px;
-    z-index: 30;
-  }
-  .menuToggle { display: flex; }
-
-  /* Le menu devient un panneau déroulant sous la barre, plutôt qu'une
-     rangée de liens en permanence visible — évite d'encombrer l'écran
-     restreint et libère la place pour le contenu. */
-  .nav {
-    display: none;
-    position: absolute;
-    top: 100%; left: 0; right: 0;
-    flex-direction: column;
-    gap: 2px;
-    background: var(--surface);
+    padding: 12px 20px;
+    padding-top: calc(12px + env(safe-area-inset-top, 0px));
+    border-right: none;
     border-bottom: 1px solid var(--border);
-    padding: 10px;
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 1px 0 rgba(30, 42, 40, 0.04);
   }
-  .nav.navOpen { display: flex; }
 
-  .sidebarFoot { display: none; }
-
-  .backdrop.open {
-    display: block;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.15);
-    z-index: 20;
+  .nav,
+  .sidebarFoot {
+    display: none;
   }
 }

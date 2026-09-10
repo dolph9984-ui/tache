@@ -5,7 +5,7 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity .2s ease;
-  z-index: 20;
+  z-index: 50;
 }
 .overlay.open { opacity: 1; pointer-events: auto; }
 
@@ -20,7 +20,7 @@
   overflow-y: auto;
   transform: translateX(100%);
   transition: transform .25s ease;
-  z-index: 21;
+  z-index: 51;
 }
 .overlay.open .drawer { transform: translateX(0); }
 
@@ -124,5 +124,9 @@
 .confirmNote.error { color: var(--urgent); }
 
 @media (max-width: 760px) {
-  .drawer { width: 100%; max-width: 100%; }
+  .drawer {
+    width: 100%;
+    max-width: 100%;
+    padding: 24px 20px calc(24px + env(safe-area-inset-bottom, 0px));
+  }
 }

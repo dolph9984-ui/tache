@@ -9,6 +9,7 @@ export default function TaskRow({ task, onToggleDone, onPostpone, onOpen }) {
   return (
     <div className={`${styles.task} ${styles[task.priority] || ''} ${stateClass}`} onClick={() => onOpen(task)}>
       <button
+        type="button"
         className={styles.check}
         onClick={(e) => { e.stopPropagation(); onToggleDone(task.id); }}
         aria-label="Marquer comme réalisée"
@@ -16,25 +17,31 @@ export default function TaskRow({ task, onToggleDone, onPostpone, onOpen }) {
         {task.status === 'done' ? '✓' : ''}
       </button>
 
-      <div className={styles.body}>
-        <div className={styles.title}>{task.title}</div>
-        <div className={styles.meta}>{task.time} · {task.duration}</div>
+      <div className={styles.main}>
+        <div className={styles.body}>
+          <div className={styles.title}>{task.title}</div>
+          <div className={styles.meta}>{task.time} · {task.duration}</div>
+        </div>
+
+        {(task.postponed || task.status === 'missed' || canPostpone) && (
+          <div className={styles.actions}>
+            {task.postponed && <PostponedTag />}
+            {task.status === 'missed' && <StatusBadge status="missed" compact={false} />}
+            {canPostpone && (
+              <button
+                type="button"
+                className={styles.postpone}
+                onClick={(e) => { e.stopPropagation(); onPostpone(task.id); }}
+                title="Reporter cette tâche à demain"
+              >
+                Reporter
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
-      {task.postponed && <PostponedTag />}
-      {task.status === 'missed' && <StatusBadge status="missed" compact={false} />}
-
-      {canPostpone && (
-        <button
-          className={styles.postpone}
-          onClick={(e) => { e.stopPropagation(); onPostpone(task.id); }}
-          title="Reporter cette tâche à demain"
-        >
-          Reporter →
-        </button>
-      )}
-
-      <div className={styles.chevron}>›</div>
+      <div className={styles.chevron} aria-hidden="true">›</div>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { SettingsProvider, useSettings } from './context/SettingsContext';
 import { TasksProvider, useTasks } from './context/TasksContext';
 import { useReminders } from './hooks/useReminders';
 import Sidebar from './components/layout/Sidebar';
-import Fab from './components/common/Fab';
+import BottomNav from './components/layout/BottomNav';
 import Dashboard from './components/dashboard/Dashboard';
 import TasksView from './components/tasks/TasksView';
 import ArchivesView from './components/archives/ArchivesView';
@@ -45,7 +45,11 @@ function AppShell() {
         {view === 'settings' && <SettingsView />}
       </main>
 
-      <Fab onClick={() => openDrawer('create')} />
+      <BottomNav
+        activeView={view}
+        onNavigate={setView}
+        onNewTask={() => openDrawer('create')}
+      />
 
       <TaskDrawer
         open={drawer.open}
